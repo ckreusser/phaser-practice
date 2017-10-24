@@ -2,56 +2,18 @@ var game = new Phaser.Game(750, 400, Phaser.CANVAS, 'gameContainer');
 
 var mainState = {
   preload: function() {
-    game.load.image("player", "assets/player.png");
-    game.load.image("wall", "assets/wall.png");
-    game.load.image("coin", "assets/coin.png");
-    game.load.image("enemy", "assets/enemy.png");
+    this.game.load.tilemap("tilemap", "assets/tile-sheets/test-level.json", null, Phaser.Tilemap.TILED_JSON);
+    this.game.load.image("tiles", "assets/tile_sheets/castle_tile_set_part1.png");
   },
   create: function() {
-    game.stage.backgroundColor = "#3598db";
-    game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.world.enableBody = true;
-    this.cursors = game.input.keyboard.createCursorKeys();
-    this.player = game.add.sprite(70, 100, "player");
-    this.player.body.gravity.y = 600;
-
-    this.walls = game.add.group();
-    this.coins = game.add.group();
-    this.enemies = game.add.group();
-
-    var level = [
-    'xxxxxxxxxxxxxxxxxxxxxx',
-    '!         !          x',
-    '!                 o  x',
-    '!         o          x',
-    '!                    x',
-    '!                    x',
-    '!                    x',
-    '!                    x',
-    '!                    x',
-    '!                    x',
-    '!                    x',
-    '!     o   !    x     x',
-    'xxxxxxxxxxxxxxxx!!!!!x',
-    ];
-
-    for (var i = 0; i < level.length; i++) {
-      for (var j = 0; j < level[i].length; j++) {
-        if (level[i][j] == 'x') {
-          var wall = game.add.sprite(30+20*j, 30+20*i, 'wall');
-          this.walls.add(wall);
-          wall.body.immovable = true;
-        }
-        else if (level[i][j] == 'o') {
-          var coin = game.add.sprite(30+20*j, 30+20*i, 'coin');
-          this.coins.add(coin);
-        }
-        else if (level[i][j] == '!') {
-          var enemy = game.add.sprite(30+20*j, 30+20*i, 'enemy');
-          this.enemies.add(enemy);
-        }
-      }
-    }
+    this.game.stage.backgroundColor = "#a9f0ff";
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.map = this.game.add.tilemap("tilemap");
+    this.map.addTilesetImage("tiles32", "tiles");
+    this.backgroundlayer = this.map.createLayer("backgroundLayer");
+    this.groundLayer = this.map.createLayer("groundLayer");
+    this.map.setCollisionBetween(1, 100, true, "groundLayer");
+    this.groundLayer.resizeWorld();
   },
   update: function() {
     if (this.cursors.left.isDown)
