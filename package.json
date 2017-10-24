@@ -5,6 +5,8 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.16.2",
+    "hbs": "^4.0.1",
+    "knex": "^0.13.0",
     "phaser": "^2.6.2"
   },
   "devDependencies": {},
